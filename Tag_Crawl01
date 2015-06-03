@@ -1,0 +1,110 @@
+__author__ = 'maruthi'
+
+
+import urllib,urllib2,os,sys
+import json,time
+import csv,re
+
+op1 = csv.writer(open("output/insta_101.csv", "wb"), delimiter=',', quotechar="'", quoting=csv.QUOTE_NONE, escapechar = ",")
+header = ["username", "user_handle", "tags", "caption", "post_link", "created_on", "media_id", "image_url", "comment_count", "like_count"]
+op1.writerow(header)
+
+def load_from_instagram(tag, total=5):
+    post_tag = list()
+    counter = total
+    url = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent'
+    # url = 'https://api.instagram.com/v1/tags/' + tag
+    params = {'client_id' : '<Place Your Client ID here!!>'}
+    done = False
+    while (done == False):
+        results = call_api(url, params)
+        data = results['data']
+        for item in data:
+        # To parse the data set into separate segments
+            owner_username = item['user']['username']
+            # owner_username = owner_username.replace("u'","'")
+            owner_id = item['user']['id']
+            # owner_id = owner_id.replace("u'","'")
+            post_tags = item['tags']
+            for tg in post_tags:
+                # tg = str(tg)
+                tg = tg.encode('ascii','ignore')
+                # tg = tg.replace("'",'"')
+                # post_tag.append(tg)
+                if len(post_tag) < 0:
+                    post_tag = tg
+                else:
+                    post_tag = post_tag, ','.join(tg)
+
+            # print type(post_tags)
+            # post_tags = post_tags.replace("u'","'")
+            post_caption = item['caption']['text']
+            post_caption = post_caption.encode('ascii','ignore')
+            # post_caption = post_caption.replace("u'","'")
+            post_link = item['link']
+            # post_link = post_link.replace("u'","'")
+            post_created = time.strftime("%D", time.localtime(int(item['created_time'])))
+            # post_created = post_created.replace("u'","'")
+            media_id = item['id']
+            # media_id = media_id.replace("u'","'")
+            image_url = item['images']['standard_resolution']['url']
+            # image_url = image_url.replace("u'","'")
+            # image_id = item['id']
+
+            # To handle empty values while parsing
+            try:
+                comment_counts = item['comments']['count']
+            except:
+                comment_counts = 0
+            # This has to be reworked to handle more than one comment
+            # if comment_counts > 0:
+            # 	comment_createdtime = item['comments']['data']['created_time']
+            # 	comment_text = item['comments']['data']['text']
+            # 	comment_username = item['comments']['data']['from']['username']
+            # 	comment_userid = item['comments']['data']['from']['id']
+            try:
+                likes_counts = item['likes']['count']
+            except:
+                likes_counts = 0
+            # post_tag = post_tag.replace("'",'"')
+            # post_tag = post_tag.replace("[","'")
+            # post_tag = post_tag.replace("]","'")
+            out_data = str(owner_username), str(owner_id), post_tag, str(post_caption), str(post_link), str(post_created), str(media_id), str(image_url),comment_counts, likes_counts
+            # print type(out_data)
+            op1.writerow(out_data)
+            print out_data
+            counter = counter - 1
+            if counter == 0:
+                    done = True
+                    break
+
+            # The part that moves the pointer to the next set of records
+            if counter > 0:
+                    try:
+                            url = results['pagination']['next_url']
+                            # Setting the intervals between each calls
+                            time.sleep(10)
+                    except:
+                            done = True
+
+#helper functions
+def call_api(url,params):
+	data = urllib.urlencode(params)
+	url = url + '?' + data
+	req = urllib2.Request(url)
+	result = json.loads(urllib2.urlopen(req).read())   #returns a Python dict of the JSON
+	return result
+
+# Getting the search tag from the user while executing the scripts 
+if __name__ == '__main__':
+    try:
+        hashtag = sys.argv[1]
+    except IndexError:
+        print 'Usage: python cr_102.py <tag> <num of records>'
+
+    if len(sys.argv) >= 3:
+        num_photos = int(sys.argv[2])
+        load_from_instagram(hashtag, total=num_photos)
+    else:
+        load_from_instagram(hashtag)
+
