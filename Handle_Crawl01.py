@@ -85,7 +85,7 @@ def instaHandlePost(userId, total=100):
     # Getting the Handle Summary Info
     userInfo = instaUserInfo(userId)
     # print len(userInfo)
-    # print type(userInfo)
+    print type(userInfo)
 
     # print userInfo[0]
     mediaCount = userInfo[0]
@@ -113,7 +113,7 @@ def instaHandlePost(userId, total=100):
     counter = total
     done1 = False
 
-    workbook = xlS.Workbook("output/test.xlsx")
+    workbook = xlS.Workbook("output/" + userName + ".xlsx")
     worksheet0 = workbook.add_worksheet('Summary')
     worksheet1 = workbook.add_worksheet('Posts')
     worksheet2 = workbook.add_worksheet('Tags')
@@ -122,9 +122,10 @@ def instaHandlePost(userId, total=100):
     # worksheet4 = workbook.add_worksheet('User Summary')
     # worksheet5 = workbook.add_worksheet('Likes Info')
     worksheet0.write(row0, col0, "owner_id")
-    worksheet0.write(row0, col0 + 1, "media_count")
-    worksheet0.write(row0, col0 + 2, "followed_by_count")
-    worksheet0.write(row0, col0 + 3, "follow_count")
+    worksheet0.write(row0, col0 + 1, "owner_name")
+    worksheet0.write(row0, col0 + 2, "media_count")
+    worksheet0.write(row0, col0 + 3, "followed_by_count")
+    worksheet0.write(row0, col0 + 4, "follow_count")
 
     worksheet1.write(row1, col1, "username")
     worksheet1.write(row1, col1 + 1, "user_handle")
@@ -177,12 +178,15 @@ def instaHandlePost(userId, total=100):
             followerID = userFollower[1]
             # if unique_followerId not in followerID:
                 # To get the unique user handles for crawling out followers
-            unique_followerId.append(followerID)
+            # unique_followerId.append(followerID)
             # To get the owners summary
             followerCount = instaUserInfo(followerID)
-            mediaCount = userInfo[0]
-            followedByCount = userInfo[1]
-            followingCount = userInfo[2]
+            print type(followerCount)
+            print len(followerCount)
+            print followerCount
+            mediaCount = followerCount[0]
+            followedByCount = followerCount[1]
+            followingCount = followerCount[2]
             worksheet4.write(row4 + 1, col4, userId)
             worksheet4.write(row4 + 1, col4 + 1, followerID)
             worksheet4.write(row4 + 1, col4 + 2, followerName)
@@ -190,6 +194,7 @@ def instaHandlePost(userId, total=100):
             worksheet4.write(row4 + 1, col4 + 4, followedByCount)
             worksheet4.write(row4 + 1, col4 + 5, followingCount)
             row4 += 1
+
 
 
 
@@ -466,9 +471,10 @@ def instaUserInfo(user_id):
         except:
             media_count = "Private Profile"
             follower_count = "Private Profile"
-            useR = media_count, follower_count
-            userCount.append(useR)
-            return userCount
+            follow_count = "Private Profile"
+            user_name = "Private Profile"
+            useR = media_count, follower_count, follow_count, user_name
+            return useR
 
 
 def instaLikes(media_id):
