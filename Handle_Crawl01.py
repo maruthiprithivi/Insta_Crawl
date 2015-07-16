@@ -8,12 +8,14 @@ import timeit
 
 
 def instaHandlePost(userId, total=100):
+    row0 = 0
+    col0 = 0
     row1 = 0
     col1 = 0
-    # row2 = 0
-    # col2 = 0
-    # row3 = 0
-    # col3 = 0
+    row2 = 0
+    col2 = 0
+    row3 = 0
+    col3 = 0
     # row4 = 0
     # col4 = 0
     # row5 = 0
@@ -24,12 +26,19 @@ def instaHandlePost(userId, total=100):
     counter = total
     done1 = False
 
-    workbook = xlS.Workbook("output/atb.xlsx")
+    workbook = xlS.Workbook("output/sportshub.xlsx")
+    worksheet0 = workbook.add_worksheet('Summary')
     worksheet1 = workbook.add_worksheet('Posts')
-    # worksheet2 = workbook.add_worksheet('Tags')
+    worksheet2 = workbook.add_worksheet('Tags')
+    worksheet3 = workbook.add_worksheet('comments')
     # worksheet3 = workbook.add_worksheet('Followers')
     # worksheet4 = workbook.add_worksheet('User Summary')
     # worksheet5 = workbook.add_worksheet('Likes Info')
+    worksheet0.write(row0, col0, "username")
+    worksheet0.write(row0, col0 + 1, "user_handle")
+    worksheet0.write(row0, col0 + 2, "caption")
+    worksheet0.write(row0, col0 + 3, "post_link")
+
     worksheet1.write(row1, col1, "username")
     worksheet1.write(row1, col1 + 1, "user_handle")
     worksheet1.write(row1, col1 + 2, "caption")
@@ -40,9 +49,15 @@ def instaHandlePost(userId, total=100):
     worksheet1.write(row1, col1 + 6, "comment_count")
     worksheet1.write(row1, col1 + 7, "like_count")
     worksheet1.write(row1, col1 + 8, "post_type")
+    worksheet2.write(row2, col2, "media_id")
+    worksheet2.write(row2, col2 + 1, "tags")
 
-    # worksheet2.write(row2, col2, "media_id")
-    # worksheet2.write(row2, col2 + 1, "tags")
+    worksheet3.write(row3, col3, "comment")
+    worksheet3.write(row3, col3 + 1, "comment_time")
+    worksheet3.write(row3, col3 + 2, "commenter_name")
+    worksheet3.write(row3, col3 + 3, "commenter_id")
+    worksheet3.write(row3, col3 + 4, "media_id")
+
     # worksheet3.write(row3, col3, "owner_name")
     # worksheet3.write(row3, col3 + 1, "owner_id")
     # worksheet3.write(row3, col3 + 2, "follower_name")
@@ -65,6 +80,17 @@ def instaHandlePost(userId, total=100):
     cnt1 = 0
     cnt2 = 0
     while (done1 == False):
+
+        userInfo = instaUserInfo(userId)
+        mediaCount = userInfo[0]
+        followedByCount = userInfo[1]
+        followingCount = userInfo[2]
+        worksheet0.write(row0 + 1, col0, userId)
+        worksheet0.write(row0 + 1, col0 + 1, mediaCount)
+        worksheet0.write(row0 + 1, col0 + 2, followedByCount)
+        worksheet0.write(row0 + 1, col0 + 3, followingCount)
+        row0 += 1
+
         if cnt1 < 1:
             startTime = timeit.default_timer()
             # print url1
@@ -88,6 +114,28 @@ def instaHandlePost(userId, total=100):
             like_count = item['likes']['count']
             post_type = item['type']
             media_id = item['id']
+            post_tags = item['tags']
+            for tg in post_tags:
+                tg= []
+                tg = tg.encode('ascii','ignore')
+                post_tag.append(tg)
+            for tag in post_tag:
+                worksheet2.write(row2 + 1, col2, media_id)
+                worksheet2.write(row2 + 1, col2 + 1, tag)
+                row2 += 1
+            mediaComments = instaComment(media_id)
+            for mediaCom in mediaComments:
+                comment = mediaCom[0]
+                comment_time = mediaCom[1]
+                commenter_name = mediaCom[2]
+                commenter_id = mediaCom[3]
+                worksheet3.write(row3, col3, comment)
+                worksheet3.write(row3, col3 + 1, comment_time)
+                worksheet3.write(row3, col3 + 2, commenter_name)
+                worksheet3.write(row3, col3 + 3, commenter_id)
+                worksheet3.write(row3, col3 + 4, media_id)
+                row3 += 1
+
             # if post_type is "image":
             #     media_link = item['images']['standard_resolution']
             # else:
@@ -100,9 +148,7 @@ def instaHandlePost(userId, total=100):
         #     owner_id = item['user']['id']
         #     post_tags = item['tags']
         #     media_link = item['images']['standard_resolution']
-        #     for tg in post_tags:
-        #         tg = tg.encode('ascii','ignore')
-        #         post_tag.append(tg)
+
         #     try:
         #         post_caption = item['caption']['text']
         #         post_caption = post_caption.encode('ascii','ignore')
@@ -135,14 +181,13 @@ def instaHandlePost(userId, total=100):
             worksheet1.write(row1 + 1,col1 + 3, post_link)
             worksheet1.write(row1 + 1,col1 + 4, post_created)
             worksheet1.write(row1 + 1,col1 + 5, media_id)
-            # worksheet1.write(row1 + 1,col1 + 6, image_url)
             worksheet1.write(row1 + 1,col1 + 6, comment_count)
             worksheet1.write(row1 + 1,col1 + 7, like_count)
             worksheet1.write(row1 + 1,col1 + 8, post_type)
             row1 += 1
             # To print out the stalk log!! LOL!!
             cnt2 += 1
-            print str(cnt2) + "x", " Stalking User " + userId + " Completed!!!"
+            # print str(cnt2) + "x", " Stalking User " + userId + " Completed!!!"
 
             # # Followers call kicks in!!
             # if owner_id not in unique_userId:
@@ -270,10 +315,35 @@ def instaFollowers(user_id):
                         done2 = True
                         return url2
 
+def instaComment(media_id):
+        userComments = list()
+        url5 = 'https://api.instagram.com/v1/media/' + media_id + '/comments'
+        params5 = {'client_id' : '56a1bcddc8af46de829258fcd3b5ca47'}
+
+        try:
+            results5 = call_api(url5, params5)
+            data = results5['data']
+            for item in data:
+                comment = item['text']
+                createdTime = time.strftime("%D %H:%M", time.localtime(int(item['created_time'])))
+                userComment = item['from']['username']
+                userIdComment = item['from']['id']
+                comments = createdTime, userComment, userIdComment, comment
+                userComments.append(comments)
+            return userComments
+
+        except:
+            comment = "NIL"
+            createdTime = "NIL"
+            userComment = "NIL"
+            userIdComment = "NIL"
+            comments = createdTime, userComment, userIdComment, comment
+            return comments
+
+
 
 def instaUserInfo(user_id):
-        cnt5 = 0
-        cnt6 = 0
+
         userCount = list()
         url3 = 'https://api.instagram.com/v1/users/' + user_id + '/'
         params3 = {'client_id' : '56a1bcddc8af46de829258fcd3b5ca47'}
@@ -282,20 +352,11 @@ def instaUserInfo(user_id):
                         # print url2
         try:
             results3 = call_api(url3, params3)
-            # print results3
-            # data3 = results3['data']
-
-            # else:
-            #     results2 = call_api1(url2)
-            #     data3 = results2['data']
-            # for item in data3:
-            # To parse the data set into separate segments
             media_count = str(results3['data']['counts']['media'])
             follower_count = str(results3['data']['counts']['followed_by'])
-            useR = media_count, follower_count
+            follow_count = str(results3['data']['counts']['follows'])
+            useR = media_count, follower_count, follow_count
             userCount.append(useR)
-            # print userCount
-            # print len(userCount)
             return userCount
 
         except:
@@ -303,18 +364,8 @@ def instaUserInfo(user_id):
             follower_count = "Private Profile"
             useR = media_count, follower_count
             userCount.append(useR)
-            # print userCount
-            # print len(userCount)
             return userCount
 
-                    # try:
-                    #     url3 = results2['pagination']['next_url']
-                    #     cnt5 += 1
-                    #     # Setting the intervals between each calls
-                    #     time.sleep(1)
-                    # except:
-                    #     done3 = True
-                    #     return url3
 
 def instaLikes(media_id):
     done4 = False
