@@ -8,92 +8,15 @@ import timeit
 
 
 def instaHandlePost(userId, total=100):
-    # row0 = 0
-    # col0 = 0
-    # row1 = 0
-    # col1 = 0
-    # row2 = 0
-    # col2 = 0
-    # row3 = 0
-    # col3 = 0
-    # row4 = 0
-    # col4 = 0
-    # # row5 = 0
-    # # col5 = 0
-    # unique_followerId = []
-    # unique_userId = []
-    # unique_mediaId = []
-    # post_tag = list()
-    # counter = total
-    # done1 = False
-    #
-    # workbook = xlS.Workbook("output/sportshub.xlsx")
-    # worksheet0 = workbook.add_worksheet('Summary')
-    # worksheet1 = workbook.add_worksheet('Posts')
-    # worksheet2 = workbook.add_worksheet('Tags')
-    # worksheet3 = workbook.add_worksheet('comments')
-    # worksheet4 = workbook.add_worksheet('Followers')
-    # # worksheet4 = workbook.add_worksheet('User Summary')
-    # # worksheet5 = workbook.add_worksheet('Likes Info')
-    # worksheet0.write(row0, col0, "owner_id")
-    # worksheet0.write(row0, col0 + 1, "media_count")
-    # worksheet0.write(row0, col0 + 2, "followed_by_count")
-    # worksheet0.write(row0, col0 + 3, "follow_count")
-    #
-    # worksheet1.write(row1, col1, "username")
-    # worksheet1.write(row1, col1 + 1, "user_handle")
-    # worksheet1.write(row1, col1 + 2, "caption")
-    # worksheet1.write(row1, col1 + 3, "post_link")
-    # worksheet1.write(row1, col1 + 4, "created_on")
-    # worksheet1.write(row1, col1 + 5, "media_id")
-    # # worksheet1.write(row1, col1 + 6, "image_url")
-    # worksheet1.write(row1, col1 + 6, "comment_count")
-    # worksheet1.write(row1, col1 + 7, "like_count")
-    # worksheet1.write(row1, col1 + 8, "post_type")
-    # worksheet2.write(row2, col2, "media_id")
-    # worksheet2.write(row2, col2 + 1, "tags")
-    #
-    # worksheet3.write(row3, col3, "comment")
-    # worksheet3.write(row3, col3 + 1, "comment_time")
-    # worksheet3.write(row3, col3 + 2, "commenter_name")
-    # worksheet3.write(row3, col3 + 3, "commenter_id")
-    # worksheet3.write(row3, col3 + 4, "media_id")
-    #
-    # worksheet4.write(row4, col4, "owner_id")
-    # worksheet4.write(row4, col4 + 1, "follower_id")
-    # worksheet4.write(row4, col4 + 2, "follower_name")
-    # worksheet4.write(row4, col4 + 3, "media_count")
-    # worksheet4.write(row4, col4 + 4, "followed_by_count")
-    # worksheet4.write(row4, col4 + 5, "follow_count")
-
-
-    # worksheet3.write(row3, col3, "owner_name")
-    # worksheet3.write(row3, col3 + 1, "owner_id")
-    # worksheet3.write(row3, col3 + 2, "follower_name")
-    # worksheet3.write(row3, col3 + 3, "follower_id")
-    # worksheet4.write(row4, col4, "owner_name")
-    # worksheet4.write(row4, col4 + 1, "owner_id")
-    # worksheet4.write(row4, col4 + 2, "media_count")
-    # worksheet4.write(row4, col4 + 3, "followed_by_count")
-    # worksheet5.write(row5, col5, "owner_name")
-    # worksheet5.write(row5, col5 + 1, "owner_id")
-    # worksheet5.write(row5, col5 + 2, "media_id")
-    # worksheet5.write(row5, col5 + 3, "user_name")
-    # worksheet5.write(row5, col5 + 4, "user_id")
-    # worksheet5.write(row5, col5 + 5, "relationship_status"
-
     # Getting the Handle Summary Info
     userInfo = instaUserInfo(userId)
-    # print len(userInfo)
-    print type(userInfo)
-
-    # print userInfo[0]
     mediaCount = userInfo[0]
     followedByCount = userInfo[1]
     followingCount = userInfo[2]
     userName = userInfo[3]
 
     ## Playing the fool here --> Starting here!!
+    cnt0 = 0
     row0 = 0
     col0 = 0
     row1 = 0
@@ -119,6 +42,7 @@ def instaHandlePost(userId, total=100):
     worksheet2 = workbook.add_worksheet('Tags')
     worksheet3 = workbook.add_worksheet('comments')
     worksheet4 = workbook.add_worksheet('Followers')
+    worksheet99 = workbook.add_worksheet('Error Logs')
     # worksheet4 = workbook.add_worksheet('User Summary')
     # worksheet5 = workbook.add_worksheet('Likes Info')
     worksheet0.write(row0, col0, "owner_id")
@@ -174,26 +98,26 @@ def instaHandlePost(userId, total=100):
         # Getting the Followers of the Handle
         userFollowers = instaFollowers(userId)
         for userFollower in userFollowers:
+
             followerName = userFollower[0]
             followerID = userFollower[1]
-            # if unique_followerId not in followerID:
-                # To get the unique user handles for crawling out followers
-            # unique_followerId.append(followerID)
-            # To get the owners summary
-            followerCount = instaUserInfo(followerID)
-            print type(followerCount)
-            print len(followerCount)
-            print followerCount
-            mediaCount = followerCount[0]
-            followedByCount = followerCount[1]
-            followingCount = followerCount[2]
-            worksheet4.write(row4 + 1, col4, userId)
-            worksheet4.write(row4 + 1, col4 + 1, followerID)
-            worksheet4.write(row4 + 1, col4 + 2, followerName)
-            worksheet4.write(row4 + 1, col4 + 3, mediaCount)
-            worksheet4.write(row4 + 1, col4 + 4, followedByCount)
-            worksheet4.write(row4 + 1, col4 + 5, followingCount)
-            row4 += 1
+            cnt0 += 1
+            print cnt0
+            if followerID not in unique_followerId:
+            # To get the unique user handles for crawling out followers
+                unique_followerId.append(followerID)
+                # To get the followers summary
+                followerCount = instaUserInfo(followerID)
+                mediaCount = followerCount[0]
+                followedByCount = followerCount[1]
+                followingCount = followerCount[2]
+                worksheet4.write(row4 + 1, col4, userId)
+                worksheet4.write(row4 + 1, col4 + 1, followerID)
+                worksheet4.write(row4 + 1, col4 + 2, followerName)
+                worksheet4.write(row4 + 1, col4 + 3, mediaCount)
+                worksheet4.write(row4 + 1, col4 + 4, followedByCount)
+                worksheet4.write(row4 + 1, col4 + 5, followingCount)
+                row4 += 1
 
 
 
@@ -244,44 +168,6 @@ def instaHandlePost(userId, total=100):
                 worksheet3.write(row3, col3 + 4, media_id)
                 row3 += 1
 
-            # if post_type is "image":
-            #     media_link = item['images']['standard_resolution']
-            # else:
-            #     media_link = item['videos']['standard_resolution']
-
-
-
-        # To parse the data set into separate segments
-        #     owner_username = item['user']['username']
-        #     owner_id = item['user']['id']
-        #     post_tags = item['tags']
-        #     media_link = item['images']['standard_resolution']
-
-        #     try:
-        #         post_caption = item['caption']['text']
-        #         post_caption = post_caption.encode('ascii','ignore')
-        #     except:
-        #         post_caption = " "
-        #     post_link = item['link']
-        #     post_created = time.strftime("%D %H:%M", time.localtime(int(item['created_time'])))
-        #     media_id = item['id']
-        #     image_url = item['images']['standard_resolution']['url']
-        #     # To handle empty values while parsing
-        #     try:
-        #         comment_counts = item['comments']['count']
-        #         # print comment_counts
-        #     except:
-        #         comment_counts = 0
-        #     try:
-        #         likes_counts = item['likes']['count']
-        #         # print likes_counts
-        #     except:
-        #         likes_counts = 0
-        #     for tag in post_tag:
-        #         worksheet2.write(row2 + 1, col2, media_id)
-        #         worksheet2.write(row2 + 1, col2 + 1, tag)
-        #         row2 += 1
-            # row = 0
 
             worksheet1.write(row1 + 1,col1, owner_username)
             worksheet1.write(row1 + 1,col1 + 1, owner_id)
@@ -295,59 +181,7 @@ def instaHandlePost(userId, total=100):
             row1 += 1
             # To print out the stalk log!! LOL!!
             cnt2 += 1
-            # print str(cnt2) + "x", " Stalking User " + userId + " Completed!!!"
 
-            # Followers call kicks in!!
-            # if owner_id not in unique_userId:
-            #     # print owner_id
-            #     # To get the unique user handles for crawling out followers
-            #     unique_userId.append(owner_id)
-            #     # To get the owners summary
-            #     followerCount = instaUserInfo(owner_id)
-            #     # print type(followerCount)
-            #     for counT in followerCount:
-            #         media_counT = counT[0]
-            #         follower_counT = counT[1]
-            #         worksheet4.write(row4 + 1,col4, owner_username)
-            #         worksheet4.write(row4 + 1,col4 + 1, owner_id)
-            #         worksheet4.write(row4 + 1,col4 + 2, media_counT)
-            #         worksheet4.write(row4 + 1,col4 + 3, follower_counT)
-            #         row4 += 1
-            #
-            #     # To get the owners individual followers and their handle
-            #     followers = instaFollowers(owner_id)
-            #
-            #     # print followers
-            #     for follower in followers:
-            #         # print follower
-            #         # The following is a lamo step, integrate it within the write function during the next code iteration (24/06/2015)
-            #         follower_name = follower[0]
-            #         follower_id = follower[1]
-            #         worksheet3.write(row3 + 1,col3, owner_username)
-            #         worksheet3.write(row3 + 1,col3 + 1, owner_id)
-            #         worksheet3.write(row3 + 1,col3 + 2, follower_name)
-            #         worksheet3.write(row3 + 1,col3 + 3, follower_id)
-            #         row3 += 1
-
-            # # Likes info kicks in
-            # if media_id not in unique_mediaId:
-            #     unique_mediaId.append(media_id)
-            #     likeInfo = instaLikes(media_id)
-            #     print likeInfo
-            #     print type(likeInfo)
-            #     for likeT in likeInfo:
-            #         # print follower
-            #         # The following is a lamo step, integrate it within the write function during the next code iteration (24/06/2015)
-            #         like_user_name = likeT[0]
-            #         like_user_id = likeT[1]
-            #         if like_user_id in
-            #         worksheet5.write(row5 + 1,col5, owner_username)
-            #         worksheet5.write(row5 + 1,col5 + 1, owner_id)
-            #         worksheet5.write(row5 + 1,col5 + 2, media_id)
-            #         worksheet5.write(row5 + 1,col5 + 3, like_user_name)
-            #         worksheet5.write(row5 + 1,col5 + 4, like_user_id)
-            #         worksheet5.write(row5 + 1,col5 + 4, "Feature Coming Soon!!")
-            #         row5 += 1
 
 
 
@@ -367,16 +201,17 @@ def instaHandlePost(userId, total=100):
         # The part that moves the pointer to the next set of records
         if counter > 0:
                 try:
-                        url1 = results1['pagination']['next_url']
-                        cnt1 += 1
-                        # Setting the intervals between each calls
-                        time.sleep(1)
+                    url1 = results1['pagination']['next_url']
+                    cnt1 += 1
+                    # Setting the intervals between each calls
+                    time.sleep(1)
 
                 except:
-                        done1 = True
-                        print "Crawl Job Finished"
-                        print url1," is the last pagination link crawled before completing stalking task or quiting because of stupid lame reasons"
-    # workbook.close()
+                    done1 = True
+                    print "Crawl Job Finished"
+                    print url1," is the last pagination link crawled before completing stalking task or quiting because of stupid lame reasons"
+                    # print cnt0
+    workbook.close()
 
 def instaFollowers(user_id):
     done2 = False
@@ -402,16 +237,6 @@ def instaFollowers(user_id):
                         followers.append(follower)
                     return followers
 
-                    # else:
-                    #     results2 = call_api1(url2)
-                    #     data2 = results2['data']
-                    #     for item in data2:
-                    #     # To parse the data set into separate segments
-                    #         follower_name = str(item['username'])
-                    #         follower_id = str(item['id'])
-                    #         follower = follower_name, follower_id
-                    #         followers.append(follower)
-                    #     return followers
 
                     try:
                         url2 = results2['pagination']['next_url']
@@ -522,7 +347,9 @@ def call_api(url,params):
         result = json.loads(urllib2.urlopen(req).read())
         return result
     except urllib2.HTTPError:
-        print "Error while calling this " + url
+        print "[Call_API - Error]: while calling this " + url
+
+        # worksheet99.write(row99, col99, timeit.default_timer())
 
 def call_api1(url):
     try:
@@ -530,7 +357,7 @@ def call_api1(url):
         result = json.loads(urllib2.urlopen(req).read())
         return result
     except urllib2.HTTPError:
-        print "Error occured while calling this " + url
+        print "[Call_API - Error]: while calling this " + url
 
 if __name__ == '__main__':
     try:
