@@ -36,7 +36,7 @@ def instaHandlePost(userId, total=100):
     counter = total
     done1 = False
 
-    workbook = xlS.Workbook("output/" + userName + ".xlsx")
+    workbook = xlS.Workbook("output/" + userName + "_handle.xlsx")
     worksheet0 = workbook.add_worksheet('Summary')
     worksheet1 = workbook.add_worksheet('Posts')
     worksheet2 = workbook.add_worksheet('Tags')

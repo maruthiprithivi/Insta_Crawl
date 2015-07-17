@@ -19,7 +19,7 @@ def instaPost(tag, total=10000):
     counter = total
     done1 = False
 
-    workbook = xlS.Workbook("output/" + tag + ".xlsx")
+    workbook = xlS.Workbook("output/" + tag + "_hashTag.xlsx")
     worksheet1 = workbook.add_worksheet('Posts')
     worksheet2 = workbook.add_worksheet('Tags')
     worksheet3 = workbook.add_worksheet('Followers')
@@ -45,7 +45,7 @@ def instaPost(tag, total=10000):
     url1 = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent'
     # WunSG access token
     params1 = {'client_id' : '297d1f6458554ee8b87d0aff6e345d75'}
-    
+
     cnt1 = 0
     cnt2 = 0
     while (done1 == False):
@@ -115,7 +115,7 @@ def instaPost(tag, total=10000):
                     unique_userId.append(owner_id)
 
                     followers = instaFollowers(owner_id)
-                    print followers
+                    # print followers
                     for follower in followers:
                         # print follower
                         follower_name = follower[0]
