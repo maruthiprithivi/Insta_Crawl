@@ -32,6 +32,9 @@ def instaPost(tag, total=10000):
     worksheet1.write(row1, col1 + 6, "image_url")
     worksheet1.write(row1, col1 + 7, "comment_count")
     worksheet1.write(row1, col1 + 8, "like_count")
+    worksheet1.write(row1 + 1,col1 + 9, "owner_media_count")
+    worksheet1.write(row1 + 1,col1 + 10, "follower_by_count")
+    worksheet1.write(row1 + 1,col1 + 11, "following_count")
     worksheet2.write(row2, col2, "media_id")
     worksheet2.write(row2, col2 + 1, "tags")
     worksheet3.write(row3, col3, "owner_name")
@@ -55,6 +58,11 @@ def instaPost(tag, total=10000):
             # To parse the data set into separate segments
                 owner_username = item['user']['username']
                 owner_id = item['user']['id']
+                # Getting user info
+                owner_info = instaUserInfo(owner_id)
+                owner_media_count = owner_info[0]
+                owner_follower_count = owner_info[1]
+                owner_follows_count = owner_info[2]
                 post_tags = item['tags']
                 for tg in post_tags:
                     tg = tg.encode('ascii','ignore')
@@ -93,6 +101,9 @@ def instaPost(tag, total=10000):
                 worksheet1.write(row1 + 1,col1 + 6, image_url)
                 worksheet1.write(row1 + 1,col1 + 7, comment_counts)
                 worksheet1.write(row1 + 1,col1 + 8, likes_counts)
+                worksheet1.write(row1 + 1,col1 + 9, owner_media_count)
+                worksheet1.write(row1 + 1,col1 + 10, owner_follower_count)
+                worksheet1.write(row1 + 1,col1 + 11, owner_follows_count)
                 row1 += 1
                 cnt2 += 1
                 print cnt2, " posts crawled!!!"
@@ -122,6 +133,12 @@ def instaPost(tag, total=10000):
             # To parse the data set into separate segments
                 owner_username = item['user']['username']
                 owner_id = item['user']['id']
+                # Getting user info
+                owner_info = instaUserInfo(owner_id)
+                owner_media_count = owner_info[0]
+                owner_follower_count = owner_info[1]
+                owner_follows_count = owner_info[2]
+
                 post_tags = item['tags']
                 for tg in post_tags:
                     tg = tg.encode('ascii','ignore')
@@ -160,6 +177,9 @@ def instaPost(tag, total=10000):
                 worksheet1.write(row1 + 1,col1 + 6, image_url)
                 worksheet1.write(row1 + 1,col1 + 7, comment_counts)
                 worksheet1.write(row1 + 1,col1 + 8, likes_counts)
+                worksheet1.write(row1 + 1,col1 + 9, owner_media_count)
+                worksheet1.write(row1 + 1,col1 + 10, owner_follower_count)
+                worksheet1.write(row1 + 1,col1 + 11, owner_follows_count)
                 row1 += 1
                 cnt2 += 1
                 print cnt2, " posts crawled!!!"
