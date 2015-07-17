@@ -217,31 +217,24 @@ def instaFollowers(user_id):
     cnt4 = 0
     followers = list()
     url2 = 'https://api.instagram.com/v1/users/' + user_id + '/followed-by'
-    # Wei Tuck Client ID
-    params2 = {'client_id' : '9d2997dba5f942c4824c98d885781f74'}
+    # WUN SG
+    params2 = {'client_id' : '826fe214c1884fcb8bb4a5c65bfb3e29'}
     while (done2 == False):
                     if cnt4 < 1:
                         # print url2
                         results2 = call_api(url2, params2)
                         data2 = results2['data']
-                        for item in data2:
-                        # To parse the data set into separate segments
-                            follower_name = str(item['username'])
-                            follower_id = str(item['id'])
-                            follower = follower_name, follower_id
-                            followers.append(follower)
-                        return followers
-
                     else:
                         results2 = call_api1(url2)
                         data2 = results2['data']
-                        for item in data2:
-                        # To parse the data set into separate segments
-                            follower_name = str(item['username'])
-                            follower_id = str(item['id'])
-                            follower = follower_name, follower_id
-                            followers.append(follower)
-                        return followers
+                    for item in data2:
+                    # To parse the data set into separate segments
+                        follower_name = str(item['username'])
+                        follower_id = str(item['id'])
+                        follower = follower_name, follower_id
+                        followers.append(follower)
+                    return followers
+
 
                     try:
                         url2 = results2['pagination']['next_url']
@@ -251,6 +244,96 @@ def instaFollowers(user_id):
                         time.sleep(1)
                     except:
                         done2 = True
+                        return url2
+
+def instaComment(media_id):
+        userComments = list()
+        url5 = 'https://api.instagram.com/v1/media/' + media_id + '/comments'
+        params5 = {'client_id' : '56a1bcddc8af46de829258fcd3b5ca47'}
+
+        try:
+            results5 = call_api(url5, params5)
+            data = results5['data']
+            for item in data:
+                comment = item['text']
+                createdTime = time.strftime("%D %H:%M", time.localtime(int(item['created_time'])))
+                userComment = item['from']['username']
+                userIdComment = item['from']['id']
+                comments = createdTime, userComment, userIdComment, comment
+                userComments.append(comments)
+            return userComments
+
+        except:
+            comment = "NIL"
+            createdTime = "NIL"
+            userComment = "NIL"
+            userIdComment = "NIL"
+            comments = createdTime, userComment, userIdComment, comment
+            return comments
+
+
+
+def instaUserInfo(user_id):
+
+        userCount = list()
+        url3 = 'https://api.instagram.com/v1/users/' + user_id + '/'
+        params3 = {'client_id' : '56a1bcddc8af46de829258fcd3b5ca47'}
+
+                    # if cnt5 < 1:
+                        # print url2
+        try:
+            results3 = call_api(url3, params3)
+            media_count = str(results3['data']['counts']['media'])
+            follower_count = str(results3['data']['counts']['followed_by'])
+            follow_count = str(results3['data']['counts']['follows'])
+            user_name = str(results3['data']['username'])
+            useR = media_count, follower_count, follow_count, user_name
+            # userCount.append(useR)
+            return useR
+
+        except:
+            media_count = "Private Profile"
+            follower_count = "Private Profile"
+            follow_count = "Private Profile"
+            user_name = "Private Profile"
+            useR = media_count, follower_count, follow_count, user_name
+            return useR
+
+
+def instaLikes(media_id):
+    done4 = False
+    cnt7 = 0
+    cnt8 = 0
+    likeS = list()
+    url4 = 'https://api.instagram.com/v1/media/' + media_id + '/likes'
+    # WUN SG
+    params4 = {'client_id' : '826fe214c1884fcb8bb4a5c65bfb3e29'}
+    while (done4 == False):
+                    if cnt7 < 1:
+                        # print url2
+                        results4 = call_api(url4, params4)
+                        data4 = results4['data']
+                    else:
+                        results4 = call_api1(url4)
+                        data4 = results4['data']
+                    for item in data4:
+                    # To parse the data set into separate segments
+                        like_userName = str(item['username'])
+                        like_id = str(item['id'])
+                        likeD = like_userName, like_id
+                        likeS.append(likeD)
+                    return likeS
+
+
+                    try:
+                        url4 = results2['pagination']['next_url']
+
+                        cnt7 += 1
+                        # Setting the intervals between each calls
+                        time.sleep(1)
+                    except:
+                        done4 = True
+                        # return url4
 
 
 #helper functions
