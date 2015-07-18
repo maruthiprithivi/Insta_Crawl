@@ -94,6 +94,7 @@ def instaPost(tag, total=10000):
             for tag in post_tag:
                 worksheet2.write(row2 + 1, col2, media_id)
                 worksheet2.write(row2 + 1, col2 + 1, tag)
+                post_tag = []
                 row2 += 1
             # row = 0
             worksheet1.write(row1 + 1,col1, owner_username)
@@ -313,6 +314,7 @@ def instaUserInfo(user_id):
             user_name = str(results3['data']['username'])
             useR = media_count, follower_count, follow_count, user_name
             # userCount.append(useR)
+            time.sleep(1)
             return useR
 
         except:
@@ -321,6 +323,7 @@ def instaUserInfo(user_id):
             follow_count = "Private Profile"
             user_name = "Private Profile"
             useR = media_count, follower_count, follow_count, user_name
+            time.sleep(1)
             return useR
 
 
