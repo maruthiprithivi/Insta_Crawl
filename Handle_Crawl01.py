@@ -57,7 +57,6 @@ def instaHandlePost(userId, total=100):
     worksheet1.write(row1, col1 + 3, "post_link")
     worksheet1.write(row1, col1 + 4, "created_on")
     worksheet1.write(row1, col1 + 5, "media_id")
-    # worksheet1.write(row1, col1 + 6, "image_url")
     worksheet1.write(row1, col1 + 6, "comment_count")
     worksheet1.write(row1, col1 + 7, "like_count")
     worksheet1.write(row1, col1 + 8, "post_type")
@@ -102,7 +101,7 @@ def instaHandlePost(userId, total=100):
             followerName = userFollower[0]
             followerID = userFollower[1]
             cnt0 += 1
-            print cnt0
+            # print cnt0
             if followerID not in unique_followerId:
             # To get the unique user handles for crawling out followers
                 unique_followerId.append(followerID)
@@ -157,10 +156,12 @@ def instaHandlePost(userId, total=100):
                 row2 += 1
             mediaComments = instaComment(media_id)
             for mediaCom in mediaComments:
-                comment = mediaCom[0]
-                comment_time = mediaCom[1]
-                commenter_name = mediaCom[2]
-                commenter_id = mediaCom[3]
+                print mediaCom
+                print len(mediaCom)
+                comment = mediaCom[3]
+                comment_time = mediaCom[0]
+                commenter_name = mediaCom[1]
+                commenter_id = mediaCom[2]
                 worksheet3.write(row3, col3, comment)
                 worksheet3.write(row3, col3 + 1, comment_time)
                 worksheet3.write(row3, col3 + 2, commenter_name)
@@ -210,7 +211,7 @@ def instaHandlePost(userId, total=100):
                     done1 = True
                     print "Crawl Job Finished"
                     print url1," is the last pagination link crawled before completing stalking task or quiting because of stupid lame reasons"
-                    # print cnt0
+                    print "Total number of followers ", cnt0
     workbook.close()
 
 def instaFollowers(user_id):
@@ -283,8 +284,11 @@ def instaUserInfo(user_id):
 
                     # if cnt5 < 1:
                         # print url2
+        results3 = call_api(url3, params3)
+        # print results3
         try:
             results3 = call_api(url3, params3)
+            # print results3
             media_count = str(results3['data']['counts']['media'])
             follower_count = str(results3['data']['counts']['followed_by'])
             follow_count = str(results3['data']['counts']['follows'])
@@ -346,7 +350,10 @@ def call_api(url,params):
         req = urllib2.Request(url)
         result = json.loads(urllib2.urlopen(req).read())
         return result
+        # print result
     except urllib2.HTTPError:
+        # result = "Private Profile", "Private Profile", "Private Profile" , "Private Profile"
+        # return result
         print "[Call_API - Error]: while calling this " + url
 
         # worksheet99.write(row99, col99, timeit.default_timer())
@@ -358,6 +365,9 @@ def call_api1(url):
         return result
     except urllib2.HTTPError:
         print "[Call_API - Error]: while calling this " + url
+
+    except urllib2.URLError:
+        print "[Call_API - Time Out Error]: while calling this " +  url
 
 if __name__ == '__main__':
     try:
