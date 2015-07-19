@@ -372,7 +372,9 @@ def call_api(url,params):
         result = json.loads(urllib2.urlopen(req).read())
         return result
     except urllib2.HTTPError:
-        print "Error while calling this " + url
+        print "[Call_API - Error]: while calling this " + url
+    except urllib2.URLError:
+        print "[Call_API - Time Out Error]: while calling this " +  url
 
 def call_api1(url):
     try:
@@ -380,7 +382,9 @@ def call_api1(url):
         result = json.loads(urllib2.urlopen(req).read())
         return result
     except urllib2.HTTPError:
-        print "Error occured while calling this " + url
+        print "[Call_API - Error]: while calling this " + url
+    except urllib2.URLError:
+        print "[Call_API - Time Out Error]: while calling this " +  url
 
 if __name__ == '__main__':
     try:

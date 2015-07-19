@@ -27,6 +27,7 @@ def instaHandlePost(userId, total=100):
     col3 = 0
     row4 = 0
     col4 = 0
+    flError = 0
     # row5 = 0
     # col5 = 0
     unique_followerId = []
@@ -99,24 +100,28 @@ def instaHandlePost(userId, total=100):
         for userFollower in userFollowers:
 
             followerName = userFollower[0]
-            followerID = userFollower[1]
+            followerI = userFollower[1]
             cnt0 += 1
             # print cnt0
-            if followerID not in unique_followerId:
-            # To get the unique user handles for crawling out followers
-                unique_followerId.append(followerID)
-                # To get the followers summary
-                followerCount = instaUserInfo(followerID)
-                mediaCount = followerCount[0]
-                followedByCount = followerCount[1]
-                followingCount = followerCount[2]
-                worksheet4.write(row4 + 1, col4, userId)
-                worksheet4.write(row4 + 1, col4 + 1, followerID)
-                worksheet4.write(row4 + 1, col4 + 2, followerName)
-                worksheet4.write(row4 + 1, col4 + 3, mediaCount)
-                worksheet4.write(row4 + 1, col4 + 4, followedByCount)
-                worksheet4.write(row4 + 1, col4 + 5, followingCount)
-                row4 += 1
+            try:
+                # if followerI not in unique_followerId:
+                # To get the unique user handles for crawling out followers
+                    unique_followerId.append(followerI)
+                    # To get the followers summary
+                    followerCount = instaUserInfo(followerI)
+                    mediaCount = followerCount[0]
+                    followedByCount = followerCount[1]
+                    followingCount = followerCount[2]
+                    worksheet4.write(row4 + 1, col4, userId)
+                    worksheet4.write(row4 + 1, col4 + 1, followerI)
+                    worksheet4.write(row4 + 1, col4 + 2, followerName)
+                    worksheet4.write(row4 + 1, col4 + 3, mediaCount)
+                    worksheet4.write(row4 + 1, col4 + 4, followedByCount)
+                    worksheet4.write(row4 + 1, col4 + 5, followingCount)
+                    row4 += 1
+            except:
+                flError += 1
+
 
 
 
@@ -146,7 +151,6 @@ def instaHandlePost(userId, total=100):
             media_id = item['id']
             post_tags = item['tags']
             for tg in post_tags:
-
                 tg = tg.encode('ascii','ignore')
                 post_tag.append(tg)
             for tag in post_tag:
@@ -156,8 +160,8 @@ def instaHandlePost(userId, total=100):
                 row2 += 1
             mediaComments = instaComment(media_id)
             for mediaCom in mediaComments:
-                print mediaCom
-                print len(mediaCom)
+                # print mediaCom
+                # print len(mediaCom)
                 comment = mediaCom[3]
                 comment_time = mediaCom[0]
                 commenter_name = mediaCom[1]
@@ -357,6 +361,8 @@ def call_api(url,params):
         print "[Call_API - Error]: while calling this " + url
 
         # worksheet99.write(row99, col99, timeit.default_timer())
+    except urllib2.URLError:
+        print "[Call_API - Time Out Error]: while calling this " +  url
 
 def call_api1(url):
     try:
