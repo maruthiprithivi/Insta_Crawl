@@ -120,6 +120,13 @@ def call_api(url,params):
 
         # worksheet99.write(row99, col99, timeit.default_timer())
     except urllib2.URLError:
+        time.sleep(5)
+        data = urllib.urlencode(params)
+        url = url + '?' + data
+        req = urllib2.Request(url)
+        result = json.loads(urllib2.urlopen(req).read())
+        return result
+    except urllib2.URLError:
         print "[Call_API - Time Out Error]: while calling this " +  url
 
 def call_api1(url):
@@ -130,6 +137,11 @@ def call_api1(url):
     except urllib2.HTTPError:
         print "[Call_API - Error]: while calling this " + url
 
+    except urllib2.URLError:
+        time.sleep(5)
+        req = urllib2.Request(url)
+        result = json.loads(urllib2.urlopen(req).read())
+        return result
     except urllib2.URLError:
         print "[Call_API - Time Out Error]: while calling this " +  url
 
