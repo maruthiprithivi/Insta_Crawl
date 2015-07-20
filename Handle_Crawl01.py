@@ -104,7 +104,7 @@ def instaHandlePost(userId, total=100):
             cnt0 += 1
             # print cnt0
             try:
-                # if followerI not in unique_followerId:
+                if followerI not in unique_followerId:
                 # To get the unique user handles for crawling out followers
                     unique_followerId.append(followerI)
                     # To get the followers summary
