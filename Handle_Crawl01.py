@@ -5,7 +5,7 @@ import json,time
 import csv,re
 import xlsxwriter as xlS
 import timeit
-
+# import handle_followers
 
 def instaHandlePost(userId, total=100):
     # Getting the Handle Summary Info
@@ -95,32 +95,32 @@ def instaHandlePost(userId, total=100):
     cnt2 = 0
     while (done1 == False):
 
-        # Getting the Followers of the Handle
-        userFollowers = instaFollowers(userId)
-        for userFollower in userFollowers:
-
-            followerName = userFollower[0]
-            followerI = userFollower[1]
-            cnt0 += 1
-            # print cnt0
-            try:
-                if followerI not in unique_followerId:
-                # To get the unique user handles for crawling out followers
-                    unique_followerId.append(followerI)
-                    # To get the followers summary
-                    followerCount = instaUserInfo(followerI)
-                    mediaCount = followerCount[0]
-                    followedByCount = followerCount[1]
-                    followingCount = followerCount[2]
-                    worksheet4.write(row4 + 1, col4, userId)
-                    worksheet4.write(row4 + 1, col4 + 1, followerI)
-                    worksheet4.write(row4 + 1, col4 + 2, followerName)
-                    worksheet4.write(row4 + 1, col4 + 3, mediaCount)
-                    worksheet4.write(row4 + 1, col4 + 4, followedByCount)
-                    worksheet4.write(row4 + 1, col4 + 5, followingCount)
-                    row4 += 1
-            except:
-                flError += 1
+        # # Getting the Followers of the Handle
+        # userFollowers = instaFollowers(userId)
+        # for userFollower in userFollowers:
+        #
+        #     followerName = userFollower[0]
+        #     followerI = userFollower[1]
+        #     cnt0 += 1
+        #     # print cnt0
+        #     try:
+        #         if followerI not in unique_followerId:
+        #         # To get the unique user handles for crawling out followers
+        #             unique_followerId.append(followerI)
+        #             # To get the followers summary
+        #             followerCount = instaUserInfo(followerI)
+        #             mediaCount = followerCount[0]
+        #             followedByCount = followerCount[1]
+        #             followingCount = followerCount[2]
+        #             worksheet4.write(row4 + 1, col4, userId)
+        #             worksheet4.write(row4 + 1, col4 + 1, followerI)
+        #             worksheet4.write(row4 + 1, col4 + 2, followerName)
+        #             worksheet4.write(row4 + 1, col4 + 3, mediaCount)
+        #             worksheet4.write(row4 + 1, col4 + 4, followedByCount)
+        #             worksheet4.write(row4 + 1, col4 + 5, followingCount)
+        #             row4 += 1
+        #     except:
+        #         flError += 1
 
 
 
@@ -159,19 +159,32 @@ def instaHandlePost(userId, total=100):
                 post_tag = []
                 row2 += 1
             mediaComments = instaComment(media_id)
-            for mediaCom in mediaComments:
-                # print mediaCom
-                # print len(mediaCom)
-                comment = mediaCom[3]
-                comment_time = mediaCom[0]
-                commenter_name = mediaCom[1]
-                commenter_id = mediaCom[2]
+            try:
+                for mediaCom in mediaComments:
+                    # print mediaCom
+                    # print len(mediaCom)
+                    comment = mediaCom[3]
+                    comment_time = mediaCom[0]
+                    commenter_name = mediaCom[1]
+                    commenter_id = mediaCom[2]
+                    worksheet3.write(row3, col3, comment)
+                    worksheet3.write(row3, col3 + 1, comment_time)
+                    worksheet3.write(row3, col3 + 2, commenter_name)
+                    worksheet3.write(row3, col3 + 3, commenter_id)
+                    worksheet3.write(row3, col3 + 4, media_id)
+                    row3 += 1
+            except:
+                comment = mediaComments[3]
+                comment_time = mediaComments[0]
+                commenter_name = mediaComments[1]
+                commenter_id = mediaComments[2]
                 worksheet3.write(row3, col3, comment)
                 worksheet3.write(row3, col3 + 1, comment_time)
                 worksheet3.write(row3, col3 + 2, commenter_name)
                 worksheet3.write(row3, col3 + 3, commenter_id)
                 worksheet3.write(row3, col3 + 4, media_id)
                 row3 += 1
+
 
 
             worksheet1.write(row1 + 1,col1, owner_username)
@@ -396,6 +409,7 @@ if __name__ == '__main__':
     if len(sys.argv) >= 3:
         posts = int(sys.argv[2])
         instaHandlePost(userHandle, total=posts)
+        print "posts: ", posts
     else:
         instaHandlePost(userHandle)
 
