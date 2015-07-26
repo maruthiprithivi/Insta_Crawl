@@ -32,8 +32,8 @@ def instaFollowers(user_id):
     cnt4 = 0
     followers = list()
     url2 = 'https://api.instagram.com/v1/users/' + user_id + '/followed-by'
-    # WUN SG
-    params2 = {'client_id' : '826fe214c1884fcb8bb4a5c65bfb3e29'}
+    # CR01
+    params2 = {'client_id' : 'dacb5b3f55e944f39e53168e328cd239'}
     while (done2 == False):
                     if cnt4 < 1:
                         # print url2
@@ -79,7 +79,8 @@ def instaUserInfo(user_id):
 
         userCount = list()
         url3 = 'https://api.instagram.com/v1/users/' + user_id + '/'
-        params3 = {'client_id' : '56a1bcddc8af46de829258fcd3b5ca47'}
+        # CR02
+        params3 = {'client_id' : 'eb674d44b72c454f9eea7338a59fbb94'}
 
                     # if cnt5 < 1:
                         # print url2
