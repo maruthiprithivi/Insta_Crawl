@@ -70,7 +70,7 @@ def instaFollowers(user_id):
 
                         cnt4 += 1
                         # Setting the intervals between each calls
-                        time.sleep(1)
+                        # time.sleep(1)
                     except:
                         done2 = True
                         return url2
