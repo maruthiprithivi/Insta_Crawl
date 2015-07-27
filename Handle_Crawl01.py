@@ -167,11 +167,11 @@ def instaHandlePost(userId, total=100):
                     comment_time = mediaCom[0]
                     commenter_name = mediaCom[1]
                     commenter_id = mediaCom[2]
-                    worksheet3.write(row3, col3, comment)
-                    worksheet3.write(row3, col3 + 1, comment_time)
-                    worksheet3.write(row3, col3 + 2, commenter_name)
-                    worksheet3.write(row3, col3 + 3, commenter_id)
-                    worksheet3.write(row3, col3 + 4, media_id)
+                    worksheet3.write(row3 + 1, col3, comment)
+                    worksheet3.write(row3 + 1, col3 + 1, comment_time)
+                    worksheet3.write(row3 + 1, col3 + 2, commenter_name)
+                    worksheet3.write(row3 + 1, col3 + 3, commenter_id)
+                    worksheet3.write(row3 + 1, col3 + 4, media_id)
                     row3 += 1
             except:
                 comment = mediaComments[3]
