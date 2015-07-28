@@ -9,16 +9,17 @@ import xlsxwriter as xlS
 
 
 
-def instaFollowers(user_id):
+def instaFollowers(user_id, total=100):
     # Getting the Handle Summary Info
     userInfo = instaUserInfo(user_id)
     mediaCount = userInfo[0]
     followedByCount = userInfo[1]
     followingCount = userInfo[2]
     userName = userInfo[3]
-
+    cntF = 0
     row0 = 0
     col0 = 0
+    counter = total
     workbook = xlS.Workbook("output/" + userName + "_handleFollowers.xlsx")
     worksheet0 = workbook.add_worksheet('Followers')
     worksheet0.write(row0, col0, "owner_id")
@@ -39,9 +40,13 @@ def instaFollowers(user_id):
                         # print url2
                         results2 = call_api(url2, params2)
                         data2 = results2['data']
+                        cntF += 1
+                        print "No. of calls made: ",cntF
                     else:
                         results2 = call_api1(url2)
                         data2 = results2['data']
+                        cntF += 1
+                        print "No. of calls made: ",cntF
 
                     try:
                         for item in data2:
@@ -64,16 +69,19 @@ def instaFollowers(user_id):
                     except:
                         print data2
 
-
-                    try:
-                        url2 = results2['pagination']['next_url']
-
-                        cnt4 += 1
-                        # Setting the intervals between each calls
-                        # time.sleep(1)
-                    except:
+                    counter = counter - 1
+                    if counter == 0:
                         done2 = True
-                        return url2
+                    if counter > 0:
+                        try:
+                            url2 = results2['pagination']['next_url']
+
+                            cnt4 += 1
+                            # Setting the intervals between each calls
+                            # time.sleep(1)
+                        except:
+                            done2 = True
+                            return url2
 
 def instaUserInfo(user_id):
 
@@ -146,6 +154,18 @@ def call_api1(url):
     except urllib2.URLError:
         print "[Call_API - Time Out Error]: while calling this " +  url
 
+# if __name__ == '__main__':
+#     try:
+#         userHandle = sys.argv[1]
+#     except IndexError:
+#         print 'Usage: python cr_201.py <user handle> <num of records>'
+#
+#     if len(sys.argv) >= 3:
+#         posts = int(sys.argv[2])
+#         instaFollowers(userHandle)
+#     else:
+#         instaFollowers(userHandle)
+
 if __name__ == '__main__':
     try:
         userHandle = sys.argv[1]
@@ -154,6 +174,7 @@ if __name__ == '__main__':
 
     if len(sys.argv) >= 3:
         posts = int(sys.argv[2])
-        instaFollowers(userHandle)
+        instaFollowers(userHandle, total=posts)
+        print "posts: ", posts
     else:
         instaFollowers(userHandle)
