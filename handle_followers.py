@@ -59,7 +59,7 @@ def instaFollowers(user_id, total=100):
                             followed_by_count = follow1[1]
                             follow_count = follow1[2]
 
-                            worksheet0.write(row0, col0, user_id)
+                            worksheet0.write(row0 + 1, col0, user_id)
                             worksheet0.write(row0 + 1, col0 + 1, follower_id)
                             worksheet0.write(row0 + 1, col0 + 2, follower_name)
                             worksheet0.write(row0 + 1, col0 + 3, media_count)
