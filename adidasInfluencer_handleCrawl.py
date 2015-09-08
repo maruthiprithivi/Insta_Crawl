@@ -61,21 +61,23 @@ def instaHandlePost(userId, total=1000):
     worksheet1.write(row1, col1 + 6, "comment_count")
     worksheet1.write(row1, col1 + 7, "like_count")
     worksheet1.write(row1, col1 + 8, "post_type")
+    worksheet1.write(row1, col1 + 9, "media_link")
+
     worksheet2.write(row2, col2, "media_id")
     worksheet2.write(row2, col2 + 1, "tags")
 
-    # worksheet3.write(row3, col3, "comment")
-    # worksheet3.write(row3, col3 + 1, "comment_time")
-    # worksheet3.write(row3, col3 + 2, "commenter_name")
-    # worksheet3.write(row3, col3 + 3, "commenter_id")
-    # worksheet3.write(row3, col3 + 4, "media_id")
-    #
-    # worksheet4.write(row4, col4, "owner_id")
-    # worksheet4.write(row4, col4 + 1, "follower_id")
-    # worksheet4.write(row4, col4 + 2, "follower_name")
-    # worksheet4.write(row4, col4 + 3, "media_count")
-    # worksheet4.write(row4, col4 + 4, "followed_by_count")
-    # worksheet4.write(row4, col4 + 5, "follow_count")
+    worksheet3.write(row3, col3, "comment")
+    worksheet3.write(row3, col3 + 1, "comment_time")
+    worksheet3.write(row3, col3 + 2, "commenter_name")
+    worksheet3.write(row3, col3 + 3, "commenter_id")
+    worksheet3.write(row3, col3 + 4, "media_id")
+
+    worksheet4.write(row4, col4, "owner_id")
+    worksheet4.write(row4, col4 + 1, "follower_id")
+    worksheet4.write(row4, col4 + 2, "follower_name")
+    worksheet4.write(row4, col4 + 3, "media_count")
+    worksheet4.write(row4, col4 + 4, "followed_by_count")
+    worksheet4.write(row4, col4 + 5, "follow_count")
 
     ## Playing the fool here --> Ending here!!
     worksheet0.write(row0 + 1, col0, userId)
@@ -89,8 +91,8 @@ def instaHandlePost(userId, total=1000):
 
     url1 = 'https://api.instagram.com/v1/users/' + userId + '/media/recent/'
     # WunSG access token
-    # params1 = {'client_id' : '297d1f6458554ee8b87d0aff6e345d75'}
-    params1 = {'client_id' : '826fe214c1884fcb8bb4a5c65bfb3e29'}
+    params1 = {'client_id' : '297d1f6458554ee8b87d0aff6e345d75'}
+    # params1 = {'client_id' : '826fe214c1884fcb8bb4a5c65bfb3e29'}
 
     cnt1 = 0
     cnt2 = 0
@@ -154,6 +156,13 @@ def instaHandlePost(userId, total=1000):
             post_type = item['type']
             media_id = item['id']
             post_tags = item['tags']
+            try:
+                media_link = item['images']['standard_resolution']['url']
+            except ValueError:
+                media_link = item['videos']['standard_resolution']['url']
+            except:
+                media_link = "No Links"
+
             for tg in post_tags:
                 tg = tg.encode('ascii','ignore')
                 post_tag.append(tg)
@@ -162,32 +171,32 @@ def instaHandlePost(userId, total=1000):
                 worksheet2.write(row2 + 1, col2 + 1, tag)
                 post_tag = []
                 row2 += 1
-            # mediaComments = instaComment(media_id)
-            # try:
-            #     for mediaCom in mediaComments:
-            #         # print mediaCom
-            #         # print len(mediaCom)
-            #         comment = mediaCom[3]
-            #         comment_time = mediaCom[0]
-            #         commenter_name = mediaCom[1]
-            #         commenter_id = mediaCom[2]
-            #         worksheet3.write(row3 + 1, col3, comment)
-            #         worksheet3.write(row3 + 1, col3 + 1, comment_time)
-            #         worksheet3.write(row3 + 1, col3 + 2, commenter_name)
-            #         worksheet3.write(row3 + 1, col3 + 3, commenter_id)
-            #         worksheet3.write(row3 + 1, col3 + 4, media_id)
-            #         row3 += 1
-            # except:
-            #     comment = mediaComments[3]
-            #     comment_time = mediaComments[0]
-            #     commenter_name = mediaComments[1]
-            #     commenter_id = mediaComments[2]
-            #     worksheet3.write(row3, col3, comment)
-            #     worksheet3.write(row3, col3 + 1, comment_time)
-            #     worksheet3.write(row3, col3 + 2, commenter_name)
-            #     worksheet3.write(row3, col3 + 3, commenter_id)
-            #     worksheet3.write(row3, col3 + 4, media_id)
-            #     row3 += 1
+            mediaComments = instaComment(media_id)
+            try:
+                for mediaCom in mediaComments:
+                    # print mediaCom
+                    # print len(mediaCom)
+                    comment = mediaCom[3]
+                    comment_time = mediaCom[0]
+                    commenter_name = mediaCom[1]
+                    commenter_id = mediaCom[2]
+                    worksheet3.write(row3 + 1, col3, comment)
+                    worksheet3.write(row3 + 1, col3 + 1, comment_time)
+                    worksheet3.write(row3 + 1, col3 + 2, commenter_name)
+                    worksheet3.write(row3 + 1, col3 + 3, commenter_id)
+                    worksheet3.write(row3 + 1, col3 + 4, media_id)
+                    row3 += 1
+            except:
+                comment = mediaComments[3]
+                comment_time = mediaComments[0]
+                commenter_name = mediaComments[1]
+                commenter_id = mediaComments[2]
+                worksheet3.write(row3, col3, comment)
+                worksheet3.write(row3, col3 + 1, comment_time)
+                worksheet3.write(row3, col3 + 2, commenter_name)
+                worksheet3.write(row3, col3 + 3, commenter_id)
+                worksheet3.write(row3, col3 + 4, media_id)
+                row3 += 1
 
 
 
@@ -200,6 +209,7 @@ def instaHandlePost(userId, total=1000):
             worksheet1.write(row1 + 1,col1 + 6, comment_count)
             worksheet1.write(row1 + 1,col1 + 7, like_count)
             worksheet1.write(row1 + 1,col1 + 8, post_type)
+            worksheet1.write(row1 + 1,col1 + 9, media_link)
             row1 += 1
             # To print out the stalk log!! LOL!!
             cnt2 += 1
@@ -301,8 +311,8 @@ def instaUserInfo(user_id):
 
         userCount = list()
         url3 = 'https://api.instagram.com/v1/users/' + user_id + '/'
-        # params3 = {'client_id' : '56a1bcddc8af46de829258fcd3b5ca47'}
-        params3 = {'client_id' : '826fe214c1884fcb8bb4a5c65bfb3e29'}
+        params3 = {'client_id' : '56a1bcddc8af46de829258fcd3b5ca47'}
+        # params3 = {'client_id' : '826fe214c1884fcb8bb4a5c65bfb3e29'}
 
                     # if cnt5 < 1:
                         # print url2
@@ -412,9 +422,9 @@ if __name__ == '__main__':
         print 'Usage: python cr_201.py <user handle> <num of records>'
 
     if len(sys.argv) >= 3:
-        posts = int(sys.argv[2])
-        instaHandlePost(userHandle, total=posts)
-        print "posts: ", posts
+        calls = int(sys.argv[2])
+        instaHandlePost(userHandle, total=calls)
+        print "posts: ", calls
     else:
         instaHandlePost(userHandle)
 
