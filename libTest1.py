@@ -85,6 +85,12 @@ def instaHandlePost(userId, total=100):
             like_count = item['likes']['count']
             post_type = item['type']
             media_id = item['id']
+            try:
+                media_link = item['images']['standard_resolution']['url']
+            except ValueError:
+                media_link = item['videos']['standard_resolution']['url']
+            except:
+                media_link = "No Links"
             # Due to heights of laziness, We will use the instaComments function here to get the handle mention count here
             # if comment_count > 0:
             data2 = instaComment(media_id)
@@ -96,7 +102,7 @@ def instaHandlePost(userId, total=100):
             for tg in post_tags:
                 tg = tg.encode('ascii','ignore')
                 post_tag.append(tg)
-            handlePost = owner_id, owner_username, post_caption, post_created, comment_count, post_link, like_count, post_type, media_id, post_tag, handleCount
+            handlePost = owner_id, owner_username, post_caption, post_created, comment_count, post_link, like_count, post_type, media_id, post_tag, handleCount, media_link
             handlePosts.append(handlePost)
 
         counter = counter - 1
