@@ -1,3 +1,4 @@
+__author__ = 'data.team'
 __author__ = 'maruthi'
 
 import urllib,urllib2,os,sys
@@ -36,17 +37,20 @@ def instaFollowers(user_id, total=100000000):
     cnt4 = 0
     followers = list()
     url2 = 'https://api.instagram.com/v1/users/' + user_id + '/followed-by'
-    # CR01
-    params2 = {'client_id' : 'dacb5b3f55e944f39e53168e328cd239'}
+    # wunsg01-01
+    params2 = {'client_id' : '5b77a83635ce4fcbbce5293f2e5314d4'}
     while (done2 == False):
         # print cnt4
-        if cnt4 < 1:
-            # print url2
-            results2 = call_api(url2, params2)
-            data2 = results2['data']
-        else:
-            results2 = call_api1(url2)
-            data2 = results2['data']
+        try:
+            if cnt4 < 1:
+                # print url2
+                results2 = call_api(url2, params2)
+                data2 = results2['data']
+            else:
+                results2 = call_api1(url2)
+                data2 = results2['data']
+        except:
+            print "The crawl of first degree followers broke here - " + url2
 
         # try:
         # print data2
@@ -93,15 +97,15 @@ def instaFollowers(user_id, total=100000000):
                     cnt4 += 1
                     # print "try"
                     # Setting the intervals between each calls
-                    time.sleep(1)
+                    # time.sleep(1)
                 except:
                     done2 = True
                     # print "except"
                     return url2
     for follower in followers:
         url3 = 'https://api.instagram.com/v1/users/' + follower + '/followed-by'
-        # CR01
-        params3 = {'client_id' : 'eb674d44b72c454f9eea7338a59fbb94'}
+        # wunsg01-02
+        params3 = {'client_id' : 'e41e663a0088484da299555491f4323a'}
         cnt5 = 0
         done3 = False
         while (done3 == False):
@@ -152,7 +156,7 @@ def instaFollowers(user_id, total=100000000):
 
                     cnt5 += 1
                     # Setting the intervals between each calls
-                    time.sleep(1)
+                    # time.sleep(1)
                 except:
                     done3 = True
                     print url3
@@ -162,8 +166,8 @@ def instaUserInfo(user_id):
 
         userCount = list()
         url3 = 'https://api.instagram.com/v1/users/' + user_id + '/'
-        # CR02
-        params3 = {'client_id' : 'eb674d44b72c454f9eea7338a59fbb94'}
+        # wunsg01-03
+        params3 = {'client_id' : '739a4990750e4b48bd5a53603e36ce95'}
 
                     # if cnt5 < 1:
                         # print url2
