@@ -75,7 +75,8 @@ def instaFollowers(user_id, total=100000000):
 
         except:
             print "The crawl of first degree followers broke here - " + url2
-            break
+            # break
+            done2 = True
 
         # try:
         # print data2
@@ -126,8 +127,11 @@ def instaFollowers(user_id, total=100000000):
                 except:
                     done2 = True
                     # print "except"
-                    return url2
+                    print url2
+
+    print "To Arthur - 2nd Degree Starting Now"
     for follower in followers:
+        print "2nd Degree"
         url3 = 'https://api.instagram.com/v1/users/' + follower + '/followed-by'
         # wunsg01-02
         params3 = {'client_id' : 'e41e663a0088484da299555491f4323a'}
@@ -139,9 +143,24 @@ def instaFollowers(user_id, total=100000000):
                 try:
                     results3 = call_api(url3, params3)
                     data3 = results3['data']
-                    print data3
+                    # print data3
                 except:
                     print "Failed Moo!!" + follower + "<---The Culprit Moo!!"
+                    follower_name1 = str(item['username'])
+                    follower_id1 = str(item['id'])
+                    # follow1 = instaUserInfo(follower_id1)
+                    # media_count1 = follow1[0]
+                    # followed_by_count1 = follow1[1]
+                    # follow_count1 = follow1[2]
+                    worksheet0.write(row0 + 1, col0, follower)
+                    worksheet0.write(row0 + 1, col0 + 1, "No Access")
+                    worksheet0.write(row0 + 1, col0 + 2, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 3, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 4, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 5, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 6, "No Access")
+                    worksheet0.write(row0 + 1, col0 + 3, "Second Degree")
+                    row0 += 1
                     break
             else:
                 try:
@@ -162,7 +181,7 @@ def instaFollowers(user_id, total=100000000):
                     data3 = results3['data']
                 except:
                     print "Failed Moo!!" + url3 + "<---The Culprit Moo!!"
-                    break
+                    done3 = True
             try:
                 for item in data3:
                 # To parse the data set into separate segments
