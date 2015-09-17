@@ -7,7 +7,17 @@ import csv,re
 import xlsxwriter as xlS
 
 
+class firstException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
+class secondException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 
 def instaFollowers(user_id, total=100000000):
@@ -22,7 +32,7 @@ def instaFollowers(user_id, total=100000000):
     followers = list()
     row0 = 0
     col0 = 0
-    workbook = xlS.Workbook("output/" + userName + "_handleFollowers.xlsx")
+    workbook = xlS.Workbook("output1/" + userName + "_handleFollowers.xlsx")
     worksheet0 = workbook.add_worksheet('Followers')
     worksheet0.write(row0, col0, "owner_id")
     worksheet0.write(row0, col0 + 1, "follower_id")
@@ -49,8 +59,23 @@ def instaFollowers(user_id, total=100000000):
             else:
                 results2 = call_api1(url2)
                 data2 = results2['data']
+        except firstException:
+            print "First Except in progress - First Degree"
+            # wunsg01-04
+            params2 = {'client_id' : '059a16fcf1f4435183abf2c658b329db'}
+            results2 = call_api1(url2)
+            data2 = results2['data']
+
+        except secondException:
+            print "Second Except in progress - First Degree"
+            # wunsg01-05
+            params2 = {'client_id' : 'def541a4d65c483cad0de027c5cc3d6a'}
+            results2 = call_api1(url2)
+            data2 = results2['data']
+
         except:
             print "The crawl of first degree followers broke here - " + url2
+            break
 
         # try:
         # print data2
@@ -120,6 +145,19 @@ def instaFollowers(user_id, total=100000000):
                     break
             else:
                 try:
+                    results3 = call_api1(url3)
+                    data3 = results3['data']
+                except firstException:
+                    print "First Except in progress - Second Degree"
+                    # wunsg02-01
+                    params3 = {'client_id' : '05fbaeda2b7648c2a3006a37475a36af'}
+                    results3 = call_api1(url3)
+                    data3 = results3['data']
+
+                except secondException:
+                    print "Second Except in progress - Second Degree"
+                    # wunsg02-02
+                    params3 = {'client_id' : 'e84d6e63cfba4f0eacb09e9fa5625764'}
                     results3 = call_api1(url3)
                     data3 = results3['data']
                 except:
