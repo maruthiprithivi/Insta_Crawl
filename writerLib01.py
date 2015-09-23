@@ -4,20 +4,20 @@ import psycopg2
 import sys
 import xlsxwriter
 
-con = None
+# con = None
 
-try:
-
-    con = psycopg2.connect(database='postgres', user='postgres')
-    cur = con.cursor()
-    cur.execute('SELECT version()')
-    ver = cur.fetchone()
-    print ver
-
-
-except psycopg2.DatabaseError, e:
-    print 'Error %s' % e
-    sys.exit(1)
+# try:
+#
+#     con = psycopg2.connect(database='postgres', user='postgres', password='P@ssw0rdDT')
+#     cur = con.cursor()
+#     cur.execute('SELECT version()')
+#     ver = cur.fetchone()
+#     print ver
+#
+#
+# except psycopg2.DatabaseError, e:
+#     print 'Error %s' % e
+#     sys.exit(1)
 
 
 cars1 = (
@@ -45,25 +45,34 @@ cars2 = (
 con = None
 
 try:
+    try:
+        print "cars1 run"
+        # Connection Credentials
+        con = psycopg2.connect(host='54.255.196.231', port='5432', database='postgres', user='postgres', password='P@ssw0rdDT')
+        cur = con.cursor()
+        # Creating a table
+        cur.execute("CREATE TABLE Cars1(Id INT, Name TEXT, Price INT)")
+        query = "INSERT INTO Cars1 (Id, Name, Price) VALUES (%s, %s, %s)"
+        # Data source pointer
+        cur.executemany(query, cars1)
+        con.commit()
 
-    con = psycopg2.connect(database='postgres', user='postgres')
-    cur = con.cursor()
+        # cur.execute("DROP TABLE IF EXISTS Cars")
 
-    cur.execute("CREATE TABLE Cars2(Id INT, Name TEXT, Price INT)")
-    query = "INSERT INTO Cars2 (Id, Name, Price) VALUES (%s, %s, %s)"
-    cur.executemany(query, cars1)
-    con.commit()
+    except:
+        # Connection Credentials
+        con = psycopg2.connect(host='54.255.196.231', port='5432', database='postgres', user='postgres', password='P@ssw0rdDT')
+        cur = con.cursor()
+        print "Second Logic in Progress"
+        query = "INSERT INTO Cars1 (Id, Name, Price) VALUES (%s, %s, %s)"
+        # Data source pointer
+        cur.executemany(query, cars2)
+        print "This Works!!"
+        con.commit()
 
-    # cur.execute("DROP TABLE IF EXISTS Cars")
-
-except:
-    con = psycopg2.connect(database='postgres', user='postgres')
-    cur = con.cursor()
-    print "Second Logic in Progress"
-    query = "INSERT INTO Cars2 (Id, Name, Price) VALUES (%s, %s, %s)"
-    cur.executemany(query, cars2)
-    print "This Works!!"
-    con.commit()
+except psycopg2.DatabaseError, e:
+    print 'Error %s' % e
+    sys.exit(1)
 
 # except psycopg2.DatabaseError, e:
 #     if con:

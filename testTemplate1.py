@@ -1,7 +1,10 @@
 __author__ = 'Maruthi'
 
 from libTest1 import *
+from storageLib01 import *
 import sys
+
+# useR = media_count, follower_count, follow_count, user_name
 
 if __name__ == '__main__':
     try:
@@ -13,13 +16,11 @@ if __name__ == '__main__':
         posts = int(sys.argv[2])
         data1 = instaHandlePost(userHandle, total=posts)
         data2 = instaUserInfo(userHandle)
+        userName = data2[3]
+        handleWriter(data1,userName)
     else:
         data1 = instaHandlePost(userHandle)
         data2 = instaUserInfo(userHandle)
-print "#"*20
-print "*"*10
-print data1
-print "#"*20
-print data2
-print "*"*10
-print "#"*20
+        userName = data2[3]
+        handleWriter(data1,userName)
+

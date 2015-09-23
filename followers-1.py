@@ -275,6 +275,7 @@ def call_api(url,params):
     except urllib2.URLError:
         print "[Call_API - Time Out Error]: while calling this " +  url
 
+
 def call_api1(url):
     try:
         req = urllib2.Request(url)
