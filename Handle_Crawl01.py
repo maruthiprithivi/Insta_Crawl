@@ -7,7 +7,7 @@ import xlsxwriter as xlS
 import timeit
 # import handle_followers
 
-def instaHandlePost(userId, total=100):
+def instaHandlePost(userId, total=10000):
     # Getting the Handle Summary Info
     userInfo = instaUserInfo(userId)
     mediaCount = userInfo[0]

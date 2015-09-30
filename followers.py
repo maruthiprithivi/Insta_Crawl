@@ -1,3 +1,4 @@
+__author__ = 'data.team'
 __author__ = 'maruthi'
 
 import urllib,urllib2,os,sys
@@ -6,7 +7,17 @@ import csv,re
 import xlsxwriter as xlS
 
 
+class firstException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
+class secondException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 
 def instaFollowers(user_id, total=100000000):
@@ -26,9 +37,9 @@ def instaFollowers(user_id, total=100000000):
     worksheet0.write(row0, col0, "owner_id")
     worksheet0.write(row0, col0 + 1, "follower_id")
     worksheet0.write(row0, col0 + 2, "follower_name")
-    # worksheet0.write(row0, col0 + 3, "media_count")
-    # worksheet0.write(row0, col0 + 4, "followed_by_count")
-    # worksheet0.write(row0, col0 + 5, "follow_count")
+    worksheet0.write(row0, col0 + 3, "media_count")
+    worksheet0.write(row0, col0 + 4, "followed_by_count")
+    worksheet0.write(row0, col0 + 5, "follow_count")
     # worksheet0.write(row0, col0 + 6, "engagement_rate")
     worksheet0.write(row0, col0 + 3, "degree_of_follower")
     done2 = False
@@ -36,17 +47,36 @@ def instaFollowers(user_id, total=100000000):
     cnt4 = 0
     followers = list()
     url2 = 'https://api.instagram.com/v1/users/' + user_id + '/followed-by'
-    # CR01
-    params2 = {'client_id' : 'dacb5b3f55e944f39e53168e328cd239'}
+    # wunsg03-01
+    params2 = {'client_id' : '4aa0528881b4447481ee54e9d0d33e70'}
     while (done2 == False):
         # print cnt4
-        if cnt4 < 1:
-            # print url2
-            results2 = call_api(url2, params2)
-            data2 = results2['data']
-        else:
+        try:
+            if cnt4 < 1:
+                # print url2
+                results2 = call_api(url2, params2)
+                data2 = results2['data']
+            else:
+                results2 = call_api1(url2)
+                data2 = results2['data']
+        except firstException:
+            print "First Except in progress - First Degree"
+            # wunsg03-02
+            params2 = {'client_id' : '5a94e7dc79a24f92bb16b441d55de1b0'}
             results2 = call_api1(url2)
             data2 = results2['data']
+
+        except secondException:
+            print "Second Except in progress - First Degree"
+            # wunsg03-03
+            params2 = {'client_id' : 'dcf3bcc6785043d8b24e15af8749f69e'}
+            results2 = call_api1(url2)
+            data2 = results2['data']
+
+        except:
+            print "The crawl of first degree followers broke here - " + url2
+            # break
+            done2 = True
 
         # try:
         # print data2
@@ -61,21 +91,21 @@ def instaFollowers(user_id, total=100000000):
                 followers.append(follower_id)
                 print "followers: " + str(len(followers))
             # follower = follower_name, follower_id
-            # follow1 = instaUserInfo(follower_id)
-            # media_count = follow1[0]
-            # followed_by_count = follow1[1]
-            # follow_count = follow1[2]
+            follow1 = instaUserInfo(follower_id)
+            media_count = follow1[0]
+            followed_by_count = follow1[1]
+            follow_count = follow1[2]
 
 
 
             worksheet0.write(row0 + 1, col0, user_id)
             worksheet0.write(row0 + 1, col0 + 1, follower_id)
             worksheet0.write(row0 + 1, col0 + 2, follower_name)
-            # worksheet0.write(row0 + 1, col0 + 3, media_count)
-            # worksheet0.write(row0 + 1, col0 + 4, followed_by_count)
-            # worksheet0.write(row0 + 1, col0 + 5, follow_count)
+            worksheet0.write(row0 + 1, col0 + 3, media_count)
+            worksheet0.write(row0 + 1, col0 + 4, followed_by_count)
+            worksheet0.write(row0 + 1, col0 + 5, follow_count)
             # worksheet0.write(row0 + 1, col0 + 6, follow_count)
-            worksheet0.write(row0 + 1, col0 + 3, "First Degree")
+            worksheet0.write(row0 + 1, col0 + 6, "First Degree")
             row0 += 1
         # except:
         #     print "Something Fishy is Happening MOOOOOOOOO!!"
@@ -93,15 +123,18 @@ def instaFollowers(user_id, total=100000000):
                     cnt4 += 1
                     # print "try"
                     # Setting the intervals between each calls
-                    time.sleep(1)
+                    # time.sleep(1)
                 except:
                     done2 = True
                     # print "except"
-                    return url2
+                    print url2
+    """
+    print "To Arthur - 2nd Degree Starting Now"
     for follower in followers:
+        print "2nd Degree"
         url3 = 'https://api.instagram.com/v1/users/' + follower + '/followed-by'
-        # CR01
-        params3 = {'client_id' : 'eb674d44b72c454f9eea7338a59fbb94'}
+        # wunsg01-02
+        params3 = {'client_id' : 'e41e663a0088484da299555491f4323a'}
         cnt5 = 0
         done3 = False
         while (done3 == False):
@@ -110,23 +143,51 @@ def instaFollowers(user_id, total=100000000):
                 try:
                     results3 = call_api(url3, params3)
                     data3 = results3['data']
-                    print data3
+                    # print data3
                 except:
                     print "Failed Moo!!" + follower + "<---The Culprit Moo!!"
+                    follower_name1 = str(item['username'])
+                    follower_id1 = str(item['id'])
+                    # follow1 = instaUserInfo(follower_id1)
+                    # media_count1 = follow1[0]
+                    # followed_by_count1 = follow1[1]
+                    # follow_count1 = follow1[2]
+                    worksheet0.write(row0 + 1, col0, follower)
+                    worksheet0.write(row0 + 1, col0 + 1, "No Access")
+                    worksheet0.write(row0 + 1, col0 + 2, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 3, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 4, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 5, "No Access")
+                    # worksheet0.write(row0 + 1, col0 + 6, "No Access")
+                    worksheet0.write(row0 + 1, col0 + 3, "Second Degree")
+                    row0 += 1
                     break
             else:
                 try:
                     results3 = call_api1(url3)
                     data3 = results3['data']
+                except firstException:
+                    print "First Except in progress - Second Degree"
+                    # wunsg03-04
+                    params3 = {'client_id' : '71447d6c5c644cadb97742eac79914ad'}
+                    results3 = call_api1(url3)
+                    data3 = results3['data']
+
+                except secondException:
+                    print "Second Except in progress - Second Degree"
+                    # wunsg03-05
+                    params3 = {'client_id' : '51ae7eaaacb548ff9bfc07e62cd6dd46'}
+                    results3 = call_api1(url3)
+                    data3 = results3['data']
                 except:
                     print "Failed Moo!!" + url3 + "<---The Culprit Moo!!"
-                    break
+                    done3 = True
             try:
                 for item in data3:
                 # To parse the data set into separate segments
                     follower_name1 = str(item['username'])
                     follower_id1 = str(item['id'])
-                    # follow1 = instaUserInfo(follower_id1)
+                    follow1 = instaUserInfo(follower_id1)
                     # media_count1 = follow1[0]
                     # followed_by_count1 = follow1[1]
                     # follow_count1 = follow1[2]
@@ -152,18 +213,19 @@ def instaFollowers(user_id, total=100000000):
 
                     cnt5 += 1
                     # Setting the intervals between each calls
-                    time.sleep(1)
+                    # time.sleep(1)
                 except:
                     done3 = True
                     print url3
+                    """
     workbook.close()
 
 def instaUserInfo(user_id):
 
         userCount = list()
         url3 = 'https://api.instagram.com/v1/users/' + user_id + '/'
-        # CR02
-        params3 = {'client_id' : 'eb674d44b72c454f9eea7338a59fbb94'}
+        # wunsg04-01
+        params3 = {'client_id' : '959f53be46a746948a51ef6fcd89d8b3'}
 
                     # if cnt5 < 1:
                         # print url2
@@ -213,6 +275,7 @@ def call_api(url,params):
         return result
     except urllib2.URLError:
         print "[Call_API - Time Out Error]: while calling this " +  url
+
 
 def call_api1(url):
     try:

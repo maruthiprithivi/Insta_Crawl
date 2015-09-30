@@ -12,19 +12,11 @@ import timeit
 def call_api(url,params):
     try:
         data = urllib.urlencode(params)
-        # print data
         url = url + data
-        # print url
         req = urllib2.Request(url)
-        # print "1"
         result = json.loads(urllib2.urlopen(req).read())
-        # print "2"
-        # print result
         return result
-        # print result
     except urllib2.HTTPError:
-        # result = "Private Profile", "Private Profile", "Private Profile" , "Private Profile"
-        # return result
         print "[Call_API - Error]: while calling this " + url
 
         # worksheet99.write(row99, col99, timeit.default_timer())
@@ -70,7 +62,15 @@ def instaHandlePost(userId, total=10000000):
     tokenNo1 = 0
     cnt1 = 0
     url1 = 'https://api.instagram.com/v1/users/' + userId + '/media/recent/?'
+    # Set the parameter here so that whenever the job starts it starts with the first key as its default key
+    params1 = {'client_id' :token1[tokenNo1]}
     while (done1 == False):
+        results1 = call_api(url1, params1)
+        data1 = results1['data']
+        # expected meta responses : '200' is all good, '429' is limit exceeded, '400' Instagram is blocking us as it suspects our calls are suspicious or basically they hate you!!!
+        responsE = results1['meta']['code']
+
+
         if cnt1 < 1:
             try:
                 params1 = {'client_id' :token1[tokenNo1]}

@@ -37,11 +37,11 @@ def instaFollowers(user_id, total=100000000):
     worksheet0.write(row0, col0, "owner_id")
     worksheet0.write(row0, col0 + 1, "follower_id")
     worksheet0.write(row0, col0 + 2, "follower_name")
-    # worksheet0.write(row0, col0 + 3, "media_count")
-    # worksheet0.write(row0, col0 + 4, "followed_by_count")
-    # worksheet0.write(row0, col0 + 5, "follow_count")
+    worksheet0.write(row0, col0 + 3, "media_count")
+    worksheet0.write(row0, col0 + 4, "followed_by_count")
+    worksheet0.write(row0, col0 + 5, "follow_count")
     # worksheet0.write(row0, col0 + 6, "engagement_rate")
-    worksheet0.write(row0, col0 + 3, "degree_of_follower")
+    worksheet0.write(row0, col0 + 6, "degree_of_follower")
     done2 = False
 
     cnt4 = 0
@@ -91,21 +91,21 @@ def instaFollowers(user_id, total=100000000):
                 followers.append(follower_id)
                 print "followers: " + str(len(followers))
             # follower = follower_name, follower_id
-            # follow1 = instaUserInfo(follower_id)
-            # media_count = follow1[0]
-            # followed_by_count = follow1[1]
-            # follow_count = follow1[2]
+            follow1 = instaUserInfo(follower_id)
+            media_count = follow1[0]
+            followed_by_count = follow1[1]
+            follow_count = follow1[2]
 
 
 
             worksheet0.write(row0 + 1, col0, user_id)
             worksheet0.write(row0 + 1, col0 + 1, follower_id)
             worksheet0.write(row0 + 1, col0 + 2, follower_name)
-            # worksheet0.write(row0 + 1, col0 + 3, media_count)
-            # worksheet0.write(row0 + 1, col0 + 4, followed_by_count)
-            # worksheet0.write(row0 + 1, col0 + 5, follow_count)
+            worksheet0.write(row0 + 1, col0 + 3, media_count)
+            worksheet0.write(row0 + 1, col0 + 4, followed_by_count)
+            worksheet0.write(row0 + 1, col0 + 5, follow_count)
             # worksheet0.write(row0 + 1, col0 + 6, follow_count)
-            worksheet0.write(row0 + 1, col0 + 3, "First Degree")
+            worksheet0.write(row0 + 1, col0 + 6, "First Degree")
             row0 += 1
         # except:
         #     print "Something Fishy is Happening MOOOOOOOOO!!"
@@ -146,8 +146,8 @@ def instaFollowers(user_id, total=100000000):
                     # print data3
                 except:
                     print "Failed Moo!!" + follower + "<---The Culprit Moo!!"
-                    follower_name1 = str(item['username'])
-                    follower_id1 = str(item['id'])
+                    # follower_name1 = str(item['username'])
+                    # follower_id1 = str(item['id'])
                     # follow1 = instaUserInfo(follower_id1)
                     # media_count1 = follow1[0]
                     # followed_by_count1 = follow1[1]
@@ -155,11 +155,11 @@ def instaFollowers(user_id, total=100000000):
                     worksheet0.write(row0 + 1, col0, follower)
                     worksheet0.write(row0 + 1, col0 + 1, "No Access")
                     worksheet0.write(row0 + 1, col0 + 2, "No Access")
-                    # worksheet0.write(row0 + 1, col0 + 3, "No Access")
-                    # worksheet0.write(row0 + 1, col0 + 4, "No Access")
-                    # worksheet0.write(row0 + 1, col0 + 5, "No Access")
+                    worksheet0.write(row0 + 1, col0 + 3, "No Access")
+                    worksheet0.write(row0 + 1, col0 + 4, "No Access")
+                    worksheet0.write(row0 + 1, col0 + 5, "No Access")
                     # worksheet0.write(row0 + 1, col0 + 6, "No Access")
-                    worksheet0.write(row0 + 1, col0 + 3, "Second Degree")
+                    worksheet0.write(row0 + 1, col0 + 6, "Second Degree")
                     row0 += 1
                     break
             else:
@@ -187,18 +187,18 @@ def instaFollowers(user_id, total=100000000):
                 # To parse the data set into separate segments
                     follower_name1 = str(item['username'])
                     follower_id1 = str(item['id'])
-                    # follow1 = instaUserInfo(follower_id1)
-                    # media_count1 = follow1[0]
-                    # followed_by_count1 = follow1[1]
-                    # follow_count1 = follow1[2]
+                    follow1 = instaUserInfo(follower_id1)
+                    media_count1 = follow1[0]
+                    followed_by_count1 = follow1[1]
+                    follow_count1 = follow1[2]
                     worksheet0.write(row0 + 1, col0, follower)
                     worksheet0.write(row0 + 1, col0 + 1, follower_id1)
                     worksheet0.write(row0 + 1, col0 + 2, follower_name1)
-                    # worksheet0.write(row0 + 1, col0 + 3, media_count1)
-                    # worksheet0.write(row0 + 1, col0 + 4, followed_by_count1)
-                    # worksheet0.write(row0 + 1, col0 + 5, follow_count1)
+                    worksheet0.write(row0 + 1, col0 + 3, media_count1)
+                    worksheet0.write(row0 + 1, col0 + 4, followed_by_count1)
+                    worksheet0.write(row0 + 1, col0 + 5, follow_count1)
                     # worksheet0.write(row0 + 1, col0 + 6, follow_count1)
-                    worksheet0.write(row0 + 1, col0 + 3, "Second Degree")
+                    worksheet0.write(row0 + 1, col0 + 6, "Second Degree")
                     row0 += 1
             except:
                 print "Failed Mooooooo!!!!"
@@ -266,7 +266,7 @@ def call_api(url,params):
 
         # worksheet99.write(row99, col99, timeit.default_timer())
     except urllib2.URLError:
-        time.sleep(5)
+        time.sleep(2)
         data = urllib.urlencode(params)
         url = url + '?' + data
         req = urllib2.Request(url)
@@ -285,7 +285,7 @@ def call_api1(url):
         print "[Call_API - Error]: while calling this " + url
 
     except urllib2.URLError:
-        time.sleep(5)
+        time.sleep(2)
         req = urllib2.Request(url)
         result = json.loads(urllib2.urlopen(req).read())
         return result
